@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>摩登大猿</title>
+  
+  <subtitle>景绣前程</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2019-08-12T07:09:32.791Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>Jack Zou</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Docker镜像安装MySQL</title>
+    <link href="http://yoursite.com/2019/08/12/Docker%E9%95%9C%E5%83%8F%E5%AE%89%E8%A3%85MySQL/"/>
+    <id>http://yoursite.com/2019/08/12/Docker镜像安装MySQL/</id>
+    <published>2019-08-12T06:49:00.000Z</published>
+    <updated>2019-08-12T07:09:32.791Z</updated>
+    
+    <content type="html"><![CDATA[<p>1、运行docker，拉取mysql镜像。<br>docker search mysql;</p><p>#拉取mysql镜像<br>docker pull docker.io/mysql<br>docker pull mysql:5.7</p><p>#查看版本号<br>sudo docker image ls<br>    REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE<br>    docker.io/mysql     latest              990386cbd5c0        2 weeks ago         443 MB</p><ul><li>启动一个容器<br>docker run -d -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -v $PWD/conf:/etc/mysql/conf.d -v $PWD/data:/var/lib/mysql -v $PWD/logs:/logs –name test_mysql mysql:5.6</li></ul><p>docker run -p 3306:3306 –name mysql_db -v $PWD/conf:/etc/mysql/conf.d -v $PWD/logs:/logs -v $PWD/data:/mysql_data -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.7<br>参数说明<br>-d 让容器在后台运行<br>-p 3306:3306 将容器的 3306 端口映射到主机的 3306 端口<br>-e 设置环境变量，这里是设置mysql的root用户的初始密码，这个必须设置<br>-v $PWD/conf:/etc/mysql/conf.d 将主机当前目录下的 conf/my.cnf 挂载到容器的 /etc/mysql/my.cnf<br>-v $PWD/data:/var/lib/mysql 将主机当前目录下的data目录挂载到容器的 /var/lib/mysql<br>-v $PWD/logs:/logs 将主机当前目录下的 logs 目录挂载到容器的 /logs<br>–name 容器的名字，随便取，但是必须唯一<br>-mysql:5.6(TAG号)</p><p>进入容器<br>docker exec -ti test_mysql /bin/bash<br>或 docker exec -ti mysql_db /bin/bash</p><p>登录mysql<br>mysql -u root -p</p><p>2 重启mysql：<br>docker restart test_mysql</p><p>查看用户信息</p><ol><li><p>mysql&gt; select host,user,plugin,authentication_string from mysql.user;    </p></li><li><p>mysql&gt; ALTER user ‘root’@’%’ IDENTIFIED WITH mysql_native_password BY ‘123456’;  </p></li><li><p>Query OK, 0 rows affected (0.01 sec)  </p></li><li><p>mysql&gt;   </p></li><li><p>mysql&gt; FLUSH PRIVILEGES;  </p></li><li><p>Query OK, 0 rows affected (0.01 sec)  </p></li><li></li><li><p>mysql&gt; </p></li></ol><p>更新来源<br>apt-get update<br>安装vim<br>apt-get install -y vim<br>如果报错</p><p>#修改加密规则<br>ALTER USER ‘root’@’localhost’ IDENTIFIED BY ‘password’ PASSWORD EXPIRE NEVER;</p><p> #更新密码（mysql_native_password模式）<br> ALTER USER ‘root’@’localhost’ IDENTIFIED WITH mysql_native_password BY  ‘{1234560}’;<br>再重置下密码：alter user ‘root’@’localhost’ identified by ‘123456’;</p><p>ALTER USER ‘root’@’localhost’ IDENTIFIED WITH mysql_native_password BY ‘YourPassword’;</p><p>1.首先下载mysql-docker镜像,我下载的版本为5.7,目前最新为8.0,可以自己指定版本</p><h1 id="tag为你要下载的版本-比如5-7"><a href="#tag为你要下载的版本-比如5-7" class="headerlink" title="tag为你要下载的版本,比如5.7"></a>tag为你要下载的版本,比如5.7</h1><p>docker pull mysql/mysql-server:5.7</p><p>用sudo docker image ls 查看镜像文件是否下载成功</p><p>2.启动mysql docker容器</p><p>docker run –name=mysql -d -p 3306:3306 -p 33060:33060 -it mysql/mysql-server:5.7 bash<br>–name : 指定容器的名称</p><p>-d : 让容器可以后台运行</p><p>-p : 指定容器所暴漏的端口需要在宿主机所映射的端口 即:宿主机3306 映射到容器的3306端口</p><p>-it : 交互式终端显示</p><p>bash: 是我们需要执行的命令</p><p>3.修改mysql的密码</p><p>使用命令docker logs 用来查看mysql容器的日志,首先获取启动时的初始临时密码</p><p>docker logs mysql</p><p>链接mysql终端修改密码</p><p>mysql -uroot -p<br>password:#把logs中的临时密码复制到这</p><p>mysql&gt; ALTER USER ‘root’@’localhost’ IDENTIFIED BY ‘password’;</p><p>#passwrod 为你要设置的密码<br>修改访问权限</p><p>mysql默认只能本地主机访问,要想外界可以访问需要修改数据库</p><p>mysql&gt;use mysql;<br>mysql&gt;update user set host = ‘%’ where user = ‘root’;<br>mysql&gt;flush privileges;<br>4.远程访问mysql</p><p>此时应该可以正常远程链接mysql</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;1、运行docker，拉取mysql镜像。&lt;br&gt;docker search mysql;&lt;/p&gt;
+&lt;p&gt;#拉取mysql镜像&lt;br&gt;docker pull docker.io/mysql&lt;br&gt;docker pull mysql:5.7&lt;/p&gt;
+&lt;p&gt;#查看版本号&lt;br&gt;
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://yoursite.com/categories/Linux/"/>
+    
+      <category term="运维" scheme="http://yoursite.com/categories/Linux/%E8%BF%90%E7%BB%B4/"/>
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux下安装Docker环境和nexus</title>
+    <link href="http://yoursite.com/2019/08/12/Linux%E4%B8%8B%E5%AE%89%E8%A3%85Docker%E7%8E%AF%E5%A2%83%E5%92%8Cnexus/"/>
+    <id>http://yoursite.com/2019/08/12/Linux下安装Docker环境和nexus/</id>
+    <published>2019-08-12T05:41:05.000Z</published>
+    <updated>2019-08-12T07:09:24.370Z</updated>
+    
+    <content type="html"><![CDATA[<p>1、centos7安装jdk环境 （jdk1.8以上）<br>vim /etc/profile<br>JAVA_HOME=/usr/local/java/jdk1.8.0_181<br>JRE_HOME=/usr/local/java/jdk1.8.0_181/jre<br>PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin<br>CLASSPATH=:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib<br>export JAVA_HOME JRE_HOME PATH CLASSPATH</p><p>MAVEN_HOME=/usr/local/maven/apache-maven-3.5.4<br>export MAVEN_HOME<br>export PATH=${PATH}:${MAVEN_HOME}/bin</p><p>source  /etc/profile  #生效环境配置</p><p>2、使用yum命令进行安装<br>step1：使用yum命令进行安装<br>    yum install -y docker<br>备注：-y 表示不询问 使用默认配置进行安装，等待提示  完毕！</p><p>step2：查看是否安装成功<br>    yum list installed | grep docker<br>备注：命令为 查看yum安装完成文件列表 并 筛选docker安装信息 如下</p><p>step3：启动docker服务<br>    service docker start</p><p>Step4：配置docker服务加速器<br>    1、进入阿里云镜像加速页面；<br>    <a href="https://cr.console.aliyun.com/#/accelerator" target="_blank" rel="noopener">https://cr.console.aliyun.com/#/accelerator</a><br>    2.修改/etc/docker/daemon.json文件配置，没有则新建；<br>    {<br>      “registry-mirrors”: [“<a href="https://p74ggjo9.mirror.aliyuncs.com&quot;]" target="_blank" rel="noopener">https://p74ggjo9.mirror.aliyuncs.com&quot;]</a><br>    }<br>    3.重启daemon；</p><p>1<br>systemctl daemon-reload</p><pre><code>4、重启docker服务；</code></pre><p>1<br>systemctl  restart docker</p><p>3、运行docker，拉取nexus镜像。<br>docker search nexus;</p><p>#拉取nexus镜像<br>docker pull docker.io/sonatype/nexus</p><p>#创建nexus使用目录<br>mkdir -p /home/nexus-data &amp;&amp; chown -R 200 /home/nexus-data</p><p>#运行<br>docker run -d -p 8081:8081 -v /home/nexus-data/:/nexus-data/ –name nexus sonatype/nexus</p><p>#查看日志<br>docker logs -f nexus</p><p>#常用命令</p><p>#查看运行中的容器<br>docker ps</p><p>#查看所有容器<br>docker ps -a</p><p>#查看镜像<br>docker images</p><p>#停止运行容器:docker stop containerId<br>docker stop b173c56ba6be</p><p>#删除容器<br>docker rm b173c56ba6be</p><p>#删除镜像:docker rmi imageId<br>docker rmi 4ab4c602aa5e</p><p>删除Docker容器镜像的方法</p><ol><li>停止所有的container，这样才能够删除其中的images：<br>docker stop $(docker ps -a -q)<br>如果想要删除所有container的话再加一个指令：<br>docker rm $(docker ps -a -q)</li><li>查看当前有些什么images<br>docker images</li><li>删除images，通过image的id来指定删除谁<br>docker rmi<br>想要删除untagged images，也就是那些id为的image的话可以用<br>docker rmi $(docker images | grep “^” | awk “{print $3}”)<br>要删除全部image的话<br>docker rmi $(docker images -q)</li></ol><p>启动docker容器时报错：</p><p>iptables failed: iptables –wait -t nat -A DOCKER -p tcp -d 0/0 –dport 5000 -j DNAT –to-destination 172.18.0.4:5000 ! -i br-ff45d935188b: iptables: No chain/target/match by that name. (exit status 1)</p><p>解决方案：重启docker</p><p>systemctl restart docker</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;1、centos7安装jdk环境 （jdk1.8以上）&lt;br&gt;vim /etc/profile&lt;br&gt;JAVA_HOME=/usr/local/java/jdk1.8.0_181&lt;br&gt;JRE_HOME=/usr/local/java/jdk1.8.0_181/jre&lt;br
+      
+    
+    </summary>
+    
+      <category term="Linux" scheme="http://yoursite.com/categories/Linux/"/>
+    
+      <category term="运维" scheme="http://yoursite.com/categories/Linux/%E8%BF%90%E7%BB%B4/"/>
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://yoursite.com/2019/08/10/hello-world/"/>
+    <id>http://yoursite.com/2019/08/10/hello-world/</id>
+    <published>2019-08-10T07:15:21.669Z</published>
+    <updated>2019-08-10T07:15:21.669Z</updated>
+    
+    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.
+      
+    
+    </summary>
+    
+    
+  </entry>
+  
+</feed>

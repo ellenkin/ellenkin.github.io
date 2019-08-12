@@ -22,7 +22,7 @@
 <meta name="verify" content="all">
     <!--Title-->
 
-<title>归档：2019 | 摩登大猿</title>
+<title>Linux下安装Docker环境和nexus | 摩登大猿</title>
 
 <link rel="alternate" href="/atom.xml" title="摩登大猿" type="application/atom+xml">
 
@@ -31,9 +31,10 @@
 
     
 <link rel="stylesheet" href="/css/base.css">
-<link rel="stylesheet" href="/css/pages/archive.css">
+<link rel="stylesheet" href="/css/pages/post.css">
 <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="/css/thirdParty/highlight/github.css">
+<link rel="stylesheet" href="/css/pages/comments.css">
 
     <!--script-->
 
@@ -43,6 +44,23 @@
 
 <!--<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>-->
 
+
+<script src="/js/thirdParty/gitment.browser.min.js"></script>
+<script>
+  var labels = "blog,gitment";
+  labels = labels.split(",");
+  var gitment = new Gitment({
+    id: window.location.pathname,
+    owner: "GeekaholicLin",
+    repo: "geekaholiclin.github.io",
+    oauth: {
+      client_id: "aa2215dfc8ee944d1205",
+      client_secret: "77cd2afa5d161bc0ab04639ed81300d808c6e22b"
+    },
+    perPage: "20",
+    labels: labels
+  });
+</script>
 
     
     
@@ -146,54 +164,16 @@
 </ul>
 
 
-        
-<div id="main">
-  <div id="post-list">
-    <ul class="archives-post-list">
-        
-      <li class="post-items" _href="/2019/08/12/Docker镜像安装MySQL/">
-        <p class="info">2019</p>
-        <h2 class="post-item-title">Docker镜像安装MySQL</h2>
-          <div class="article-meta">
-    
-    
-    <span class="categories-meta fa-wrap">
-            <i class="fa fa-folder-open-o"></i>
-        <span>运维</span>
-    </span>
-    
-    
-    <span class="fa-wrap">
-         <i class="fa fa-tags"></i>
-        <span class="tags-meta">
-            
-            Linux
-            
-        </span>
-    </span>
-    
-    
-    <span class="fa-wrap">
-        <i class="fa fa-clock-o"></i>
-        <span class="date-meta ">08/12</span>
-    </span>
-    
-    
-    <span class="fa-wrap">
-            <i class="fa fa-thermometer-three-quarters"></i>
-        <span class="hits hits-meta " data-leadcloud-title="Docker镜像安装MySQL"
-              data-leadcloud-url="/2019/08/12/Docker镜像安装MySQL/"><i class="fa fa-spinner fa-spin"></i></span>
-    </span>
-    
-    
-</div>
+        <div id="main">
+    <article id="post">
+        <div id="post-header">
 
-      </li>
-        
-      <li class="post-items" _href="/2019/08/12/Linux下安装Docker环境和nexus/">
-        <p class="info">2019</p>
-        <h2 class="post-item-title">Linux下安装Docker环境和nexus</h2>
-          <div class="article-meta">
+            <h1 id="Linux下安装Docker环境和nexus">
+                
+                Linux下安装Docker环境和nexus
+                
+            </h1>
+            <div class="article-meta">
     
     
     <span class="categories-meta fa-wrap">
@@ -214,7 +194,7 @@
     
     <span class="fa-wrap">
         <i class="fa fa-clock-o"></i>
-        <span class="date-meta ">08/12</span>
+        <span class="date-meta ">2019/08/12</span>
     </span>
     
     
@@ -227,51 +207,120 @@
     
 </div>
 
-      </li>
+            
+            
+        </div>
         
-      <li class="post-items" _href="/2019/08/10/hello-world/">
-        <p class="info">2019</p>
-        <h2 class="post-item-title">Hello World</h2>
-          <div class="article-meta">
+        <div id="post-body">
+            <p>1、centos7安装jdk环境 （jdk1.8以上）<br>vim /etc/profile<br>JAVA_HOME=/usr/local/java/jdk1.8.0_181<br>JRE_HOME=/usr/local/java/jdk1.8.0_181/jre<br>PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin<br>CLASSPATH=:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib<br>export JAVA_HOME JRE_HOME PATH CLASSPATH</p>
+<p>MAVEN_HOME=/usr/local/maven/apache-maven-3.5.4<br>export MAVEN_HOME<br>export PATH=${PATH}:${MAVEN_HOME}/bin</p>
+<p>source  /etc/profile  #生效环境配置</p>
+<p>2、使用yum命令进行安装<br>step1：使用yum命令进行安装<br>    yum install -y docker<br>备注：-y 表示不询问 使用默认配置进行安装，等待提示  完毕！</p>
+<p>step2：查看是否安装成功<br>    yum list installed | grep docker<br>备注：命令为 查看yum安装完成文件列表 并 筛选docker安装信息 如下</p>
+<p>step3：启动docker服务<br>    service docker start</p>
+<p>Step4：配置docker服务加速器<br>    1、进入阿里云镜像加速页面；<br>    <a href="https://cr.console.aliyun.com/#/accelerator" target="_blank" rel="noopener">https://cr.console.aliyun.com/#/accelerator</a><br>    2.修改/etc/docker/daemon.json文件配置，没有则新建；<br>    {<br>      “registry-mirrors”: [“<a href="https://p74ggjo9.mirror.aliyuncs.com&quot;]" target="_blank" rel="noopener">https://p74ggjo9.mirror.aliyuncs.com&quot;]</a><br>    }<br>    3.重启daemon；</p>
+<p>1<br>systemctl daemon-reload</p>
+<pre><code>4、重启docker服务；</code></pre><p>1<br>systemctl  restart docker</p>
+<p>3、运行docker，拉取nexus镜像。<br>docker search nexus;</p>
+<p>#拉取nexus镜像<br>docker pull docker.io/sonatype/nexus</p>
+<p>#创建nexus使用目录<br>mkdir -p /home/nexus-data &amp;&amp; chown -R 200 /home/nexus-data</p>
+<p>#运行<br>docker run -d -p 8081:8081 -v /home/nexus-data/:/nexus-data/ –name nexus sonatype/nexus</p>
+<p>#查看日志<br>docker logs -f nexus</p>
+<p>#常用命令</p>
+<p>#查看运行中的容器<br>docker ps</p>
+<p>#查看所有容器<br>docker ps -a</p>
+<p>#查看镜像<br>docker images</p>
+<p>#停止运行容器:docker stop containerId<br>docker stop b173c56ba6be</p>
+<p>#删除容器<br>docker rm b173c56ba6be</p>
+<p>#删除镜像:docker rmi imageId<br>docker rmi 4ab4c602aa5e</p>
+<p>删除Docker容器镜像的方法</p>
+<ol>
+<li>停止所有的container，这样才能够删除其中的images：<br>docker stop $(docker ps -a -q)<br>如果想要删除所有container的话再加一个指令：<br>docker rm $(docker ps -a -q)</li>
+<li>查看当前有些什么images<br>docker images</li>
+<li>删除images，通过image的id来指定删除谁<br>docker rmi<br>想要删除untagged images，也就是那些id为的image的话可以用<br>docker rmi $(docker images | grep “^” | awk “{print $3}”)<br>要删除全部image的话<br>docker rmi $(docker images -q)</li>
+</ol>
+<p>启动docker容器时报错：</p>
+<p>iptables failed: iptables –wait -t nat -A DOCKER -p tcp -d 0/0 –dport 5000 -j DNAT –to-destination 172.18.0.4:5000 ! -i br-ff45d935188b: iptables: No chain/target/match by that name. (exit status 1)</p>
+<p>解决方案：重启docker</p>
+<p>systemctl restart docker</p>
+
+        </div>
+        <div id="post-footer">
+            <div class="avatar" >
+                <img src="https://www.keaidian.com/uploads/allimg/190417/17232016_38.jpg" alt="avatar"/>
+                
+                <a href="javascript:void(0)" class="high-song">high起来 &#128541;</a>
+                
+                
+                <a href="javascript:void(0)" class="donate fa">赠我一杯 &#128536;</a>
+                
+            </div>
+            <ul class="author-profile-section">
+                <li>
+                  
+                  作者:
+                  
+                    
+                    <a href="/about.html">Jack Zou</a>
+                </li>
+                
+                <li>发表日期: <span>2019-08-12  13:41:05</span></li>
+                
+                <li>最后编辑日期: <span>2019-08-12  15:09:24</span></li>
+                
+                <li class="post-category">
+                    文章分类:
+                    
+                    <a href="/categories/Linux/">Linux</a>
+                    
+                    <a href="/categories/Linux/运维/">运维</a>
+                    
+                </li>
+                <li class="post-tags">
+                    文章标签:
+                    
+                    <a href="/tags/Linux/">Linux</a>
+                    
+                </li>
+                
+                <li> 版权声明: <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/" target="_blank">
+知识共享署名-非商业性使用-禁止演绎 3.0 未本地化版本许可协议（CC BY-NC-ND 3.0）
+</a></li>
+                
+            </ul>
+            <div id="donate-wrap">
+                
+                
+                
+                <img src="http://example.com/alipay.jpg" alt="支付宝付款" class="donate-img">
+                
+                <img src="http://example.com/wechat.png" alt="微信付款" class="donate-img">
+                
+                
+            </div>
+        </div>
+    </article>
+    <div class="article-nav">
+        
+        <a href="/2019/08/12/Docker镜像安装MySQL/" class="pre-post fa fa-caret-left">Docker镜像安装MySQL</a>
+        
+        
+        <a href="/2019/08/10/hello-world/" class="next-post fa">Hello World</a>
+        
+    </div>
     
-    
-    <span class="categories-meta fa-wrap">
-            <i class="fa fa-folder-open-o"></i>
-        <span>null</span>
-    </span>
-    
-    
-    <span class="fa-wrap">
-         <i class="fa fa-tags"></i>
-        <span class="tags-meta">
-            
-            null
-            
-        </span>
-    </span>
-    
-    
-    <span class="fa-wrap">
-        <i class="fa fa-clock-o"></i>
-        <span class="date-meta ">08/10</span>
-    </span>
-    
-    
-    <span class="fa-wrap">
-            <i class="fa fa-thermometer-three-quarters"></i>
-        <span class="hits hits-meta " data-leadcloud-title="Hello World"
-              data-leadcloud-url="/2019/08/10/hello-world/"><i class="fa fa-spinner fa-spin"></i></span>
-    </span>
-    
+    <div id="comments">
+        
+
+<script>
+  gitment.render(document.getElementById("comments"));
+</script>
+
+
+
+    </div>
     
 </div>
-
-      </li>
-        
-    </ul>
-  </div>
-</div>
-
 
 
     </div>
@@ -308,8 +357,14 @@
     <li class="totop-btn fa fa-angle-up"></li>
     <li class="exchange-btn fa fa-exchange"></li>
   
+    <li class="toc-btn fa fa-list-ul"></li>
+    
     
 
+    
+    <li class="comment-btn fa fa-comments-o">
+        <a href="#comments" title="comments"></a>
+    </li>
     
 </ul>
 <p id="process"></p>
@@ -327,6 +382,8 @@
         </div>
     </div>
 </div>
+
+    
 
 
     <script src="/js/highsong.js"></script>
